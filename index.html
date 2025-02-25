@@ -106,7 +106,7 @@
         const commentDiv = document.createElement('div');
         commentDiv.style.overflow = 'hidden';
         commentDiv.setAttribute('id', `${id}`);
-        commentDiv.innerHTML = `&#32;&#32;&#32;&#32;<em>${row[0]}</em>&#32;&#32;&#32;&#32;<span onclick="reply(event.target)" title="Click to reply">#${id}</span>&#32;&#32;&#32;&#32;<button onclick="toggle(event.target)">▲</button>`;
+        commentDiv.innerHTML = `&#32;&#32;&#32;&#32;<em>${row[0]}</em>&#32;&#32;&#32;&#32;<span class="id" onclick="reply(event.target)" title="Click to reply">#${id}</span>&#32;&#32;&#32;&#32;<button onclick="toggle(event.target)">▲</button>`;
         const subject = document.createElement('strong');
         subject.textContent = row[1];
         commentDiv.prepend(subject);
