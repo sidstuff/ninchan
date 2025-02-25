@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta charset="utf-8">
+
+    <title>ninchan</title>
+
+    <meta name="description" content="Post anonymously ;)">
+    <meta name="author" content="sidstuff">
+
+    <meta property="og:title" content="ninchan">
+    <meta property="og:url" content="https://ninchan.pages.dev">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Post anonymously ;)">
+    <meta property="og:image" content="https://ninchan.pages.dev/icon.png">
+    <meta property="og:site_name" content="ninchan">
+    <meta property="og:locale" content="en_US">
+
+    <link rel="canonical" href="https://ninchan.pages.dev">
+
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="icon" type="image/x-icon" href="icon.png">
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <style>
+      div:target{
+        background-color: #778;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="margin-bottom: 0">ninchan<img src="icon.png" height="24px" style="margin-left: 8px;"></h1>
+    Post anonymously ;)<br>
+    <small><a href="https://github.com/sidstuff/ninchan">[GitHub]</a> &ndash; by <a href="https://github.com/sidstuff">@sidstuff</a></small><br><br>
+    <form id="post-reply" action="https://docs.google.com/forms/d/e/1FAIpQLScFepOBLH-CGPUalBH2QdaJy1M456bxI5Kh4yvpVPjI46MqaA/formResponse" target="dummyframe" method="POST">
+      <label for="subject">Subject:</label><br>
+      <input id="subject" type="text" name="entry.1471465473" required><br><br>
+
+      <label for="comment">Comment:</label><br>
+      <textarea id="comment" name="entry.508563818" required></textarea><br><br>
+
+      <button id="submit-button" type="submit">Submit</button>&#32;&#32;&#32;&#32;<a id="reload-link" href="https://ninchan.pages.dev" style="display: none;">Reload?</a>
+    </form>
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+    <p>Show last <span id="num"></span> posts:&#32;&#32;&#32;&#32;<a href="https://ninchan.pages.dev"><button>Reload</button></a></p>
+    <input id="num-slider" type="range" min="2" max="200" value="48" class="slider" style="width: 90%;">
+    <br><hr>
+    <div id="comments" style="white-space: pre-wrap;"></div>
+    <script>
+      const submitButton = document.getElementById('submit-button');
+      const reloadLink = document.getElementById('reload-link');
+      document.getElementsByTagName('form')[0].onsubmit = function() {
+        submitButton.innerHTML = 'Posted!';
+        reloadLink.style.display = 'inline';
+      }
+      const comments = document.getElementById('comments');
+      function hashCode(str) {
+        let hash = 0;
+        for (let i = 0, len = str.length; i < len; i++) {
+          let chr = str.charCodeAt(i);
+          hash = (hash << 5) - hash + chr;
+          hash |= 0; // Convert to 32bit integer
+        }
+        return hash >>> 0;
+      }
+      /*
+
+      Need to handle URLs like example.com http://localhost:8000 mailto:someone@example.com ftp://username:password@example.com
+
+      /([-.a-z0-9]+:\/{0,3}([-.:\p{L}\p{N}]+@)?|([-.:\p{L}\p{N}]+@)?[-\p{L}\p{N}]+\.)([-\p{L}\p{N}]+\.)*[\p{L}\p{N}]{2,}(:[0-9]+)?([\/?#]\S*)?/gu
+
+      (                         a protocol scheme
+         [-.a-z0-9]+               protocol name
+         :                         colon
+         \/{0,3}                   optional slashes
+         ([-.:\p{L}\p{N}]+@)?      optional email name
+      |                         OR a subdomain
+         ([-.:\p{L}\p{N}]+@)?      optional email name
+         [-\p{L}\p{N}]+\.          subdomain
+      )                         THAT'S WHAT INDICATES A URL
+      ([-\p{L}\p{N}]+\.)*       optional extra subdomains
+      [\p{L}\p{N}]{2,}          top level domain
+      (:[0-9]+)?                optional port number
+      (                         optional path
+         [\/?#]                    slash, question mark, or hash
+         \S*                       optional non-whitespace characters
+      )?
+
+      */
+      function addComment(row) {
+        const id = hashCode(row.join(','));
+        const commentDiv = document.createElement('div');
+        commentDiv.setAttribute('id', `${id}`);
+        commentDiv.innerHTML = `&#32;&#32;&#32;&#32;<em>${row[0]}</em>&#32;&#32;&#32;&#32;<a href="#post-reply" onclick="reply(event.target)">#${id}</a>&#32;&#32;&#32;&#32;<button onclick="toggle(event.target)">▲</button>`;
+        const subject = document.createElement('strong');
+        subject.textContent = row[1];
+        commentDiv.prepend(subject);
+        const para = document.createElement('p');
+        function sanitize(match) {
+          return match.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27');
+        }
+        function desanitize(match) {
+          return match.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#x27', "'");
+        }
+        para.innerHTML = sanitize(row[2]).replace(/([-.a-z0-9]+:\/{0,3}([-.:\p{L}\p{N}]+@)?|([-.:\p{L}\p{N}]+@)?[-\p{L}\p{N}]+\.)([-\p{L}\p{N}]+\.)*[\p{L}\p{N}]{2,}(:[0-9]+)?([\/?#]\S*)?/gu, (match) => {
+                                           let url = desanitize(match), trail = '';
+                                           while ( '.,;'.includes(url.slice(-1)) ) { trail = url.slice(-1) + trail; url = url.slice(0, -1); }
+                                           url = sanitize(url); let realurl = url;
+                                           if ( !/^[-.a-z0-9]+:/.test(url) ) { realurl = 'http://' + url; }
+                                           return `<a href="${realurl}">${url}</a>${trail}`;
+                                         }).replace(/&gt;&gt;[0-9]+/g, (match) => { return `<a href="#${match.substring(8)}">${match}</a>`; });
+        commentDiv.append(para);
+        comments.append(commentDiv);
+        comments.append(document.createElement('hr'));
+      }
+      function parseCSV(str) {
+
+        let row = ['','',''], col = 0;
+        let quote = false;  // 'true' means we're inside a quoted field
+
+        // Iterate over each character
+        for (let c = 0; c < str.length; c++) {
+          let cc = str[c], nc = str[c+1];        // Current character, next character
+
+          // If the current character is a quotation mark, and we're inside a
+          // quoted field, and the next character is also a quotation mark,
+          // add a quotation mark to the current column and skip the next character
+          if (cc == '"' && quote && nc == '"') { row[col] += cc; ++c; continue; }
+
+          // If it's just one quotation mark, begin/end quoted field
+          if (cc == '"') { quote = !quote; continue; }
+
+          // If it's a comma and we're not in a quoted field, move on to the next column
+          if (cc == ',' && !quote) { ++col; continue; }
+
+          // If it's a newline and we're not in a quoted field, display the current row, then
+          // move on to the next row and move to column 0 of that new row
+          if (cc == '\n' && !quote) {
+            addComment(row); row = ['','','']; col = 0; continue;
+          }
+          // Otherwise, append the current character to the current column
+          row[col] += cc;
+        }
+      }
+      const slider = document.getElementById('num-slider');
+      const num = document.getElementById('num');
+      let number = sessionStorage.getItem('num');
+      if (number != null) {
+        slider.value = number;
+      } else {
+        sessionStorage.setItem('num', slider.value);
+      }
+      num.innerHTML = slider.value;
+      slider.oninput = function() {
+        num.innerHTML = this.value;
+        sessionStorage.setItem('num', this.value);
+      }
+      const sqlStatement = encodeURIComponent(`order by A desc limit ${Number(slider.value) + 1}`);
+      const csvUrl = `https://docs.google.com/spreadsheets/d/19PMMu9IgQs4YjcwSsBswTtV__6mFBffc721jb2cLDvQ/gviz/tq?tqx=out:csv&sheet=comments&tq=${sqlStatement}&headers=0`;
+      fetch(csvUrl)
+        .then(response => response.text())
+        .then(csvText => parseCSV(csvText))
+        .catch(error => console.error('Error fetching data:', error));
+      function toggle(el) {
+        if (el.innerHTML === '▲') {
+          el.innerHTML = '▼';
+          el.nextSibling.style.display = 'none';
+        } else {
+          el.innerHTML = '▲';
+          el.nextSibling.style.display = 'block';
+        }
+      }
+      function reply(el) {
+        const comment = document.getElementById('comment');
+        comment.innerHTML += `>>${el.innerHTML.substring(1)}`;
+      }
+    </script>
+  </body>
+</html>
