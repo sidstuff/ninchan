@@ -111,7 +111,7 @@
         subject.textContent = row[1];
         commentDiv.prepend(subject);
         const para = document.createElement('p');
-        para.style.overflow = 'hidden';
+        para.style.overflow = 'scroll';
         function sanitize(match) {
           return match.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27');
         }
