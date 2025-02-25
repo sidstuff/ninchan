@@ -37,6 +37,9 @@
       strong {
         color: #41ce42;
       }
+      .greentext {
+        color: #e5ff66;
+      }
     </style>
   </head>
   <body>
@@ -119,7 +122,8 @@
                                            url = sanitize(url); let realurl = url;
                                            if ( !/^[-.a-z0-9]+:/.test(url) ) { realurl = 'http://' + url; }
                                            return `<a href="${realurl}">${url}</a>${trail}`;
-                                         }).replace(/&gt;&gt;[0-9]+/g, (match) => { return `<a href="#${match.substring(8)}">${match}</a>`; });                              
+                                         }).replace(/&gt;&gt;[0-9]+/g, (match) => { return `<a href="#${match.substring(8)}">${match}</a>`; })
+                                           .replace(/^&gt;.*$/gm, (match) => { return `<span class="greentext">${match}</span>`; });                             
         commentDiv.append(para);
         comments.append(commentDiv);
         comments.append(document.createElement('hr'));
