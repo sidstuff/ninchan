@@ -24,7 +24,7 @@
     <link rel="icon" type="image/x-icon" href="icon.png">
     <link rel="shortcut icon" href="icon.png" type="image/x-icon">
     <link rel="apple-touch-icon" href="icon.png">
-
+  
     <style>
       div:target{
         background-color: #778;
@@ -36,7 +36,7 @@
     <h1 style="margin-bottom: 0">ninchan<img src="icon.png" height="24px" style="margin-left: 8px;"></h1>
     Post anonymously ;)<br>
     <small><a href="https://github.com/sidstuff/ninchan">[GitHub]</a> &ndash; by <a href="https://github.com/sidstuff">@sidstuff</a></small><br><br>
-    <form id="post-reply" action="https://docs.google.com/forms/d/e/1FAIpQLScFepOBLH-CGPUalBH2QdaJy1M456bxI5Kh4yvpVPjI46MqaA/formResponse" target="dummyframe" method="POST">
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLScFepOBLH-CGPUalBH2QdaJy1M456bxI5Kh4yvpVPjI46MqaA/formResponse" target="dummyframe" method="POST">
       <label for="subject">Subject:</label><br>
       <input id="subject" type="text" name="entry.1471465473" required><br><br>
 
@@ -95,7 +95,7 @@
         const id = hashCode(row.join(','));
         const commentDiv = document.createElement('div');
         commentDiv.setAttribute('id', `${id}`);
-        commentDiv.innerHTML = `&#32;&#32;&#32;&#32;<em>${row[0]}</em>&#32;&#32;&#32;&#32;<a href="#post-reply" onclick="reply(event.target)">#${id}</a>&#32;&#32;&#32;&#32;<button onclick="toggle(event.target)">▲</button>`;
+        commentDiv.innerHTML = `&#32;&#32;&#32;&#32;<em>${row[0]}</em>&#32;&#32;&#32;&#32;<span onclick="reply(event.target)" title="Click to reply">#${id}</span>&#32;&#32;&#32;&#32;<button onclick="toggle(event.target)">▲</button>`;
         const subject = document.createElement('strong');
         subject.textContent = row[1];
         commentDiv.prepend(subject);
@@ -112,7 +112,7 @@
                                            url = sanitize(url); let realurl = url;
                                            if ( !/^[-.a-z0-9]+:/.test(url) ) { realurl = 'http://' + url; }
                                            return `<a href="${realurl}">${url}</a>${trail}`;
-                                         }).replace(/&gt;&gt;[0-9]+/g, (match) => { return `<a href="#${match.substring(8)}">${match}</a>`; });
+                                         }).replace(/&gt;&gt;[0-9]+/g, (match) => { return `<a href="#${match.substring(8)}">${match}</a>`; });                              
         commentDiv.append(para);
         comments.append(commentDiv);
         comments.append(document.createElement('hr'));
@@ -176,7 +176,9 @@
       }
       function reply(el) {
         const comment = document.getElementById('comment');
-        comment.innerHTML += `>>${el.innerHTML.substring(1)}`;
+        comment.value += `>>${el.innerHTML.substring(1)}
+`;      comment.focus();
+        comment.selectionStart = comment.value.length;
       }
     </script>
   </body>
