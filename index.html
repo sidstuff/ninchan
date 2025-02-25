@@ -104,12 +104,14 @@
       function addComment(row) {
         const id = hashCode(row.join(','));
         const commentDiv = document.createElement('div');
+        commentDiv.style.overflow = 'hidden';
         commentDiv.setAttribute('id', `${id}`);
         commentDiv.innerHTML = `&#32;&#32;&#32;&#32;<em>${row[0]}</em>&#32;&#32;&#32;&#32;<span onclick="reply(event.target)" title="Click to reply">#${id}</span>&#32;&#32;&#32;&#32;<button onclick="toggle(event.target)">▲</button>`;
         const subject = document.createElement('strong');
         subject.textContent = row[1];
         commentDiv.prepend(subject);
         const para = document.createElement('p');
+        para.style.overflow = 'hidden';
         function sanitize(match) {
           return match.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27');
         }
