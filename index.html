@@ -81,10 +81,10 @@
 
       Need to handle URLs like example.com http://localhost:8000 mailto:someone@example.com ftp://username:password@example.com
 
-      /([-.a-z0-9]+:\/{0,3}([-.:\p{L}\p{N}]+@)?|([-.:\p{L}\p{N}]+@)?[-\p{L}\p{N}]+\.)([-\p{L}\p{N}]+\.)*[\p{L}\p{N}]{2,}(:[0-9]+)?([\/?#]\S*)?/gu
+      /([a-z]{3,}:\/{0,3}([-.:\p{L}\p{N}]+@)?|([-.:\p{L}\p{N}]+@)?[-\p{L}\p{N}]+\.)([-\p{L}\p{N}]+\.)*[\p{L}\p{N}]{2,}(:[0-9]+)?([\/?#]\S*)?/gu
 
       (                         a protocol scheme
-         [-.a-z0-9]+               protocol name
+         [a-z]{3,}                 protocol name
          :                         colon
          \/{0,3}                   optional slashes
          ([-.:\p{L}\p{N}]+@)?      optional email name
@@ -118,7 +118,7 @@
         function desanitize(match) {
           return match.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#x27', "'");
         }
-        para.innerHTML = sanitize(row[2]).replace(/([-.a-z0-9]+:\/{0,3}([-.:\p{L}\p{N}]+@)?|([-.:\p{L}\p{N}]+@)?[-\p{L}\p{N}]+\.)([-\p{L}\p{N}]+\.)*[\p{L}\p{N}]{2,}(:[0-9]+)?([\/?#]\S*)?/gu, (match) => {
+        para.innerHTML = sanitize(row[2]).replace(/([a-z]{3,}:\/{0,3}([-.:\p{L}\p{N}]+@)?|([-.:\p{L}\p{N}]+@)?[-\p{L}\p{N}]+\.)([-\p{L}\p{N}]+\.)*[\p{L}\p{N}]{2,}(:[0-9]+)?([\/?#]\S*)?/gu, (match) => {
                                            let url = desanitize(match), trail = '';
                                            while ( '.,;'.includes(url.slice(-1)) ) { trail = url.slice(-1) + trail; url = url.slice(0, -1); }
                                            url = sanitize(url); let realurl = url;
