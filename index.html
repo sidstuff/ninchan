@@ -123,6 +123,9 @@
                                            while ( '.,;'.includes(url.slice(-1)) ) { trail = url.slice(-1) + trail; url = url.slice(0, -1); }
                                            url = sanitize(url); let realurl = url;
                                            if ( !/^[-.a-z0-9]+:/.test(url) ) { realurl = 'http://' + url; }
+                                           if (/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(url)) {
+                                            return `<img src="${realurl}" alt="Image" style="max-width: 100%; height: auto;">${trail}`;
+                                           }
                                            return `<a href="${realurl}">${url}</a>${trail}`;
                                          }).replace(/&gt;&gt;[0-9]+/g, (match) => { return `<a href="#${match.substring(8)}">${match}</a>`; })
                                            .replace(/^&gt;.*$/gm, (match) => { return `<span class="greentext">${match}</span>`; });                             
