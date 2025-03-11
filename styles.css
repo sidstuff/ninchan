@@ -1,0 +1,99 @@
+h1 {
+  margin-bottom: 0;
+}
+
+h1, h3, .tripcode, .greentext, #image-test-result, #number {
+  color: #e5ff66;
+}
+
+#submit-button, .reload-button, strong, h2 {
+  color: #41ce42;
+}
+
+#icon {
+  height: 24px;
+  margin-left: 8px;
+}
+
+#subject, #comment {
+  width: 60%;
+}
+
+#test-image {
+  width: 50%;
+}
+
+.id:hover {
+  color: #e5ff66;
+  text-decoration: underline;
+}
+
+#signature, #reload-link, #dummy, .next {
+  display: none;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-container > * {
+  margin-right: 60px;
+}
+
+.flex-container > :nth-child(1) {
+  flex-grow: 1;
+}
+
+#comments {
+  white-space: pre-wrap;
+}
+
+#loader {
+  border: 5px solid #808080;
+  border-top: 5px solid #41ce42;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 25px auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+div:target{
+  background-color: #778;
+  color: white;
+}
+
+img, video {
+  height: 200px;
+}
+
+#settings-icon {
+  width: 30px;
+  fill: #41ce42;
+  position: fixed;
+  top: 30px;
+  right: 30px;
+}
+
+#settings {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: #ffffff66;
+  backdrop-filter: blur(10px);
+  padding: 10px 30px 30px;
+}
+
+.settings {
+  width: 100px;
+}
+
+#close-settings {
+  position: absolute;
+  right: 30px;
+}

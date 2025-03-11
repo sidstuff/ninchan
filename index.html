@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta charset="utf-8">
+
+    <title>ninchan</title>
+
+    <meta name="description" content="Post anonymously ;)">
+    <meta name="author" content="sidstuff">
+
+    <meta property="og:title" content="ninchan">
+    <meta property="og:url" content="https://ninchan.pages.dev">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Post anonymously ;)">
+    <meta property="og:image" content="https://ninchan.pages.dev/icon.png">
+    <meta property="og:site_name" content="ninchan">
+    <meta property="og:locale" content="en_US">
+
+    <link rel="canonical" href="https://ninchan.pages.dev">
+
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="icon" type="image/x-icon" href="icon.png">
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <script>
+      const targetId = window.location.toString().match(/#([0-9]+)/);
+      if (targetId != null && window.location.toString().match(/start=([0-9]+)/) == null) {
+        window.location = `/?start=${targetId[1]}#${targetId[1]}`;
+      }
+    </script>
+    <h1>ninchan<img id="icon" src="icon.png"></h1>
+    Post anonymously ;)<br>
+    <small><a href="https://github.com/sidstuff/ninchan">[GitHub]</a> &ndash; by <a href="https://github.com/sidstuff">@sidstuff</a></small><br><br>
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLScQqdlig8IuV3K5XugBRlcVkhXwb-B2--G9pp8GY_zF72OqpA/formResponse" target="dummy-frame" method="POST">
+      <label for="subject">Subject:</label><br>
+      <input id="subject" type="text" name="entry.1867902634" required><br><br>
+
+      <label for="comment">Comment:</label><br>
+      <textarea id="comment" name="entry.1545593050" rows="7" required></textarea><br><br>
+      
+      <input id="signature" type="text" name="entry.73620021">
+    </form>
+    <button id="submit-button">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;<a id="reload-link" href="/">Reload?</a>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="sign"><label for="sign"> Use tripcode</label>
+    <br><br>
+    <small>To embed images/videos, simply include a direct link to them. By default, upto two images of less than 1MB each, and three videos, are allowed per post. Go to Settings to change these values. Anything more will be displayed as a link.</small><br><br>
+    <label for="test-image">Test if your image/video can be embedded:</label><br>
+      <input id="test-image" type="text" placeholder="Paste your link here"> <button id="test-image-btn">Test!</button>
+      <div id="image-test-result"></div>
+    <iframe name="dummy-frame" id="dummy"></iframe>
+    <p>Show <span id="number"></span> posts per page:&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:window.location.reload(true)"><button class="reload-button">Reload</button></a></p>
+    <div class="flex-container">
+      <input id="num-slider" type="range" min="1" max="100" value="50" class="slider">
+      <button class="next">Next Page</button>
+    </div>
+    <br><hr>
+    <div id="comments"></div>
+    <div class="flex-container">
+      <div></div>
+      <button class="next">Next Page</button>
+    </div>
+    <svg id="settings-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m.354 5.54c.349-1.07.924-2.06 1.68-2.9.128-.141.33-.192.51-.128l1.81.646c.492.175 1.03-.0801 1.21-.57.0173-.0481.0306-.0976.0398-.148l.345-1.89c.0343-.188.179-.336.367-.376.548-.116 1.11-.175 1.68-.175.569 0 1.13.059 1.68.175.187.0397.332.188.367.376l.346 1.89c.0937.511.586.85 1.1.757.0505-.00918.1-.0224.148-.0396l1.81-.646c.18-.0642.381-.0138.51.128.759.836 1.33 1.82 1.68 2.9.0588.181.0019.38-.144.503l-1.47 1.24c-.398.336-.447.93-.109 1.33.0332.039.0696.0752.109.108l1.47 1.24c.146.123.203.322.144.504-.349 1.07-.924 2.06-1.68 2.9-.128.141-.33.192-.51.128l-1.81-.646c-.491-.175-1.03.0802-1.21.57-.0173.0481-.0306.0976-.0398.148l-.346 1.89c-.0344.188-.179.336-.367.376-.548.116-1.11.175-1.68.175-.57 0-1.13-.0591-1.68-.175-.187-.0397-.332-.188-.367-.376l-.345-1.89c-.0937-.511-.586-.85-1.1-.757-.0505.0093-.1.0224-.148.0396l-1.81.646c-.18.0642-.382.0137-.51-.128-.759-.836-1.33-1.82-1.68-2.9-.0589-.181-.00211-.38.144-.504l1.47-1.24c.398-.336.447-.93.109-1.33-.0332-.039-.0696-.0752-.109-.108l-1.47-1.24c-.146-.123-.203-.322-.144-.503zm5.31 2.46c0 1.29 1.05 2.33 2.33 2.33s2.33-1.05 2.33-2.33c0-1.29-1.05-2.33-2.33-2.33s-2.33 1.05-2.33 2.33z"></svg>
+    <div id="settings">
+    <h2>Settings</h2>
+    <h3>>Post Settings</h3>
+    Max number of posts displayable per page: <input id="posts" class="settings" type="number" min="1" value="100">
+    <h3>>Media Settings</h3>
+    Max number of videos displayed per post: <input id="videos" class="settings" type="number" min="0" value="3"><br><br>
+    Max number of images displayed per post: <input id="images" class="settings" type="number" min="0" value="2"><br><br>
+    Max size of images displayed: <input id="size" class="settings" type="number" min="0" value="1000"> KB<br><br>
+    <a href="javascript:window.location.reload(true)"><button class="reload-button">Reload</button></a><button id="close-settings">Close menu</button>
+    </div>
+    <script src="elliptic.min.js" defer></script> <!-- https://github.com/indutny/elliptic/tree/db0e00b72e3d720a96f286c68449dd3b91013835 -->
+    <script src="script.js" defer></script>
+  </body>
+</html>
